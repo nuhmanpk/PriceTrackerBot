@@ -18,7 +18,7 @@ async def scrape(url):
         return product_name, price
     except Exception as e:
         print(e)
-        return None
+        return None,None
 
 
 async def scrape_price(soup):
