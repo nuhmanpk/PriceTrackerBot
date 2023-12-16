@@ -7,6 +7,8 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyc
+*.session
+*.session-journal
 
 # Virtual Environment
 .venv/
