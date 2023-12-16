@@ -1,0 +1,52 @@
+# .gitignore
+
+# Python
+*.pyc
+*.pyo
+__pycache__/
+*.pyc
+*.pyo
+*.pyc
+
+# Virtual Environment
+.venv/
+ENV/
+env/
+
+# IDEs and editors
+.vscode/
+.idea/
+
+# Python-specific files
+*.pyc
+*.pyo
+*.pyd
+
+# Logs
+*.log
+
+# Environment variables
+.env
+
+# Dependency directories
+__pycache__/
+.cache/
+
+# macOS
+.DS_Store
+
+# Compiled Python files
+*.pyc
+*.pyo
+*.pyd
+
+# Miscellaneous
+*.bak
+*.swp
+*.tmp
+*.tmp.*
+*.~*
+*~
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
