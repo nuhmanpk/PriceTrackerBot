@@ -1,0 +1,46 @@
+{
+    "name": "PriceTrackerBot",
+    "env": {
+        "API_ID": {
+            "description": "your app id, take it from my.telegram.org",
+            "value": ""
+        },
+        "API_HASH": {
+            "description": "your app Hash, take it from my.telegram.org",
+            "value": ""
+        },
+        "BOT_TOKEN": {
+            "description": "Bot Token From @botFather",
+            "value": ""
+        },
+        "MONGO_URI": {
+            "description": "Database URI from mongodb.com",
+            "value": ""
+        },
+        "DATABASE": {
+            "description": "Database Name",
+            "value": ""
+        },
+        "COLLECTION": {
+            "description": "Collection Name",
+            "value": ""
+        },
+        "GLOBAL_COLLECTION": {
+            "description": "Collection Name",
+            "value": ""
+        },
+        "PRICE_CLASS": {
+            "description": "Class name from Flipkart.com for scraping the Product",
+            "value": "_30jeq3 _16Jk6d"
+        },
+        "PRODUCT_NAME_CLASS": {
+            "description": "Class name from Flipkart.com for scraping the Product",
+            "value": "B_NuCI"
+        }
+    },
+    "buildpacks": [
+        {
+            "url": "heroku/python"
+        }
+    ]
+}
