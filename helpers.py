@@ -5,7 +5,7 @@ from bson import ObjectId
 dbclient = MongoClient(os.getenv("MONGO_URI"))
 database = dbclient[os.getenv("DATABASE")]
 collection = database[os.getenv("COLLECTION")]
-global_collection = database[os.getenv("GLOBAL_COLLECTION")]
+PRODUCTS = database[os.getenv("PRODUCTS")]
 
 
 async def fetch_all_products(user_id):
@@ -15,9 +15,8 @@ async def fetch_all_products(user_id):
 
         global_products = []
         for product in products:
-            global_product = global_collection.find_one(
-                {"_id": product.get("product_id")}
-            )
+            global_product = PRODUCTS.find_one({"_id": product.get("product_id")})
+            global_product["product_id"] = product.get("_id")
             global_products.append(global_product)
 
         return global_products
@@ -30,7 +29,7 @@ async def fetch_all_products(user_id):
 async def fetch_one_product(_id):
     try:
         product = collection.find_one({"_id": ObjectId(_id)})
-        global_product = global_collection.find_one({"_id": product.get("product_id")})
+        global_product = PRODUCTS.find_one({"_id": product.get("product_id")})
         return global_product
 
     except Exception as e:
@@ -40,35 +39,32 @@ async def fetch_one_product(_id):
 
 async def add_new_product(user_id, product_name, product_url, initial_price):
     try:
-        existing_global_product = global_collection.find_one(
-            {"product_name": product_name}
-        )
-
+        existing_global_product = PRODUCTS.find_one({"product_name": product_name})
         if not existing_global_product:
             global_new_product = {
-                "user_id": user_id,
                 "product_name": product_name,
                 "url": product_url,
                 "price": initial_price,
                 "upper": initial_price,
                 "lower": initial_price,
             }
-            new_global_product = global_collection.insert_one(global_new_product)
+            insert_result = PRODUCTS.insert_one(global_new_product)
+            existing_global_product = {"_id": insert_result.inserted_id}
 
-            existing_product = collection.find_one(
-                {"user_id": user_id, "product_id": new_global_product.inserted_id}
-            )
+        existing_product = collection.find_one(
+            {"user_id": user_id, "product_id": existing_global_product["_id"]}
+        )
 
-            if existing_product:
-                print("Product already exists.")
-                return existing_product["_id"]
+        if existing_product:
+            print("Product already exists.")
+            return existing_product["_id"]
 
-            new_local_product = {
-                "user_id": user_id,
-                "product_id": new_global_product.inserted_id,
-            }
+        new_local_product = {
+            "user_id": user_id,
+            "product_id": existing_global_product["_id"],
+        }
 
-            result = collection.insert_one(new_local_product)
+        result = collection.insert_one(new_local_product)
 
         print("Product added successfully.")
         return result.inserted_id
@@ -80,7 +76,7 @@ async def add_new_product(user_id, product_name, product_url, initial_price):
 
 async def update_product_price(id, new_price):
     try:
-        global_product = global_collection.find_one(
+        global_product = PRODUCTS.find_one(
             {"_id": id},
         )
 
@@ -93,7 +89,7 @@ async def update_product_price(id, new_price):
             elif new_price < lower_price:
                 lower_price = new_price
 
-            global_collection.update_one(
+            PRODUCTS.update_one(
                 {"_id": id},
                 {
                     "$set": {

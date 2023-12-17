@@ -1,15 +1,24 @@
+import asyncio
+import threading
 from pyrogram import Client
 from pyrogram import filters
 from pyrogram.types import Message
 from dotenv import load_dotenv
 import os
+import schedule
+import time
+from datetime import datetime, timedelta
+import pytz
 
 from scraper import scrape
 from scheduler import check_prices
-from helpers import (fetch_all_products, add_new_product, fetch_one_product, delete_one)
+from helpers import fetch_all_products, add_new_product, fetch_one_product, delete_one
 from regex_patterns import flipkart_url_patterns
 
 load_dotenv()
+
+timezone = pytz.timezone("Asia/Kolkata")
+
 
 bot_token = os.getenv("BOT_TOKEN")
 api_id = os.getenv("API_ID")
@@ -32,9 +41,11 @@ async def start(_, message: Message):
 
     await message.reply_text(text, quote=True)
 
+
 @app.on_message(filters.command("help") & filters.private)
 async def help(_, message: Message):
     await check_prices()
+
 
 @app.on_message(filters.command("my_trackings") & filters.private)
 async def track(_, message):
@@ -46,13 +57,13 @@ async def track(_, message):
             products_message = "Your Tracked Products:\n\n"
 
             for i, product in enumerate(products, start=1):
-                _id = product.get("_id")
+                _id = product.get("product_id")
                 product_name = product.get("product_name")
                 product_url = product.get("url")
                 product_price = product.get("price")
 
                 products_message += (
-                    f"🏷️ **Product {i}**: [{product_name}]({product_url})\n"
+                    f"🏷️ **Product {i}**: [{product_name}]({product_url})\n\n"
                 )
                 products_message += f"💰 **Current Price**: {product_price}\n"
                 products_message += f"❌ Use `/stop {_id}` to Stop tracking\n\n"
@@ -98,7 +109,7 @@ async def track_product(_, message):
                 minimum_price = product.get("lower")
 
                 products_message = (
-                    f"🛍 **Product:** [{product_name}]({product_url})\n"
+                    f"🛍 **Product:** [{product_name}]({product_url})\n\n"
                     f"💲 **Current Price:** {product_price}\n"
                     f"📉 **Lowest Price:** {minimum_price}\n"
                     f"📈 **Highest Price:** {maximum_price}\n"
@@ -113,6 +124,7 @@ async def track_product(_, message):
     except Exception as e:
         print(e)
 
+
 @app.on_message(filters.command("stop") & filters.private)
 async def delete_product(_, message):
     try:
@@ -120,7 +132,7 @@ async def delete_product(_, message):
         status = await message.reply_text("Deleting Product....")
         chat_id = message.chat.id
         if id:
-            is_deleted = await delete_one(id,chat_id)
+            is_deleted = await delete_one(id, chat_id)
             if is_deleted:
                 await status.edit("Product Deleted from Your Tracking List")
             else:
@@ -130,5 +142,24 @@ async def delete_product(_, message):
     except Exception as e:
         print(e)
 
+
+schedule.every().day.at("00:00").do(lambda: asyncio.run(check_prices())).tag(
+    "daily_job"
+)
+
+
+def run_schedule():
+    while True:
+        schedule.run_pending()
+        time.sleep(5)
+
+
+def main():
+    schedule_thread = threading.Thread(target=run_schedule)
+    schedule_thread.start()
+
+    app.run(print("Bot Running"))
+
+
 if __name__ == "__main__":
-    app.run(print("Bot Running..."))
+    main()

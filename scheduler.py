@@ -9,17 +9,17 @@ load_dotenv()
 
 dbclient = MongoClient(os.getenv("MONGO_URI"))
 database = dbclient[os.getenv("DATABASE")]
-global_collection = database[os.getenv("GLOBAL_COLLECTION")]
+PRODUCTS = database[os.getenv("PRODUCTS")]
 
 
 async def check_prices():
-    for product in global_collection.find():
+    print("Checking Price for Products...")
+    for product in PRODUCTS.find():
         _, current_price = await scrape(product["url"])
-        
+        time.sleep(1)
         if current_price is not None:
-            
             if current_price != product["price"]:
-                global_collection.update_one(
+                PRODUCTS.update_one(
                     {"_id": product["_id"]},
                     {
                         "$set": {
@@ -33,4 +33,4 @@ async def check_prices():
                         }
                     },
                 )
-    print('Completed')
+    print("Completed")
