@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 import pytz
 
 from scraper import scrape
-from scheduler import check_prices
+from scheduler import check_prices, compare_prices
 from helpers import fetch_all_products, add_new_product, fetch_one_product, delete_one
 from regex_patterns import flipkart_url_patterns
 
@@ -44,7 +44,19 @@ async def start(_, message: Message):
 
 @app.on_message(filters.command("help") & filters.private)
 async def help(_, message: Message):
-    await check_prices()
+    text = (
+        "🤖 **Price Tracker Bot Help**\n\n"
+        "Here are the available commands:\n"
+        "1. `/my_trackings`: View all the products you are currently tracking.\n"
+        "2. `/stop < product_id >`: Stop tracking a specific product. Replace `<product_id>` with the product ID you want to stop tracking.\n"
+        "3. `/product < product_id >`: Get detailed information about a specific product. Replace `<product_id>` with the product ID you want information about.\n"
+        "\n\n**How It Works:**\n\n"
+        "1. Send the product link from Flipkart.\n"
+        "2. The bot will automatically scrape and track the product.\n"
+        "3. If there is a price change, the bot will notify you with the updated information.\n"
+        "Feel free to use the commands and start tracking your favorite products!\n"
+    )
+    await message.reply_text(text, quote=True)
 
 
 @app.on_message(filters.command("my_trackings") & filters.private)
@@ -143,7 +155,7 @@ async def delete_product(_, message):
         print(e)
 
 
-schedule.every().day.at("00:00").do(lambda: asyncio.run(check_prices())).tag(
+schedule.every().day.at("00:00").do(lambda: asyncio.run(check_prices(app))).tag(
     "daily_job"
 )
 

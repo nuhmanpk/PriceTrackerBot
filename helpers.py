@@ -45,6 +45,7 @@ async def add_new_product(user_id, product_name, product_url, initial_price):
                 "product_name": product_name,
                 "url": product_url,
                 "price": initial_price,
+                "previous_price": initial_price,
                 "upper": initial_price,
                 "lower": initial_price,
             }
