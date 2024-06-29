@@ -7,11 +7,10 @@ from dotenv import load_dotenv
 import os
 import schedule
 import time
-from datetime import datetime, timedelta
 import pytz
 
 from scraper import scrape
-from scheduler import check_prices, compare_prices
+from scheduler import check_prices
 from helpers import fetch_all_products, add_new_product, fetch_one_product, delete_one
 from regex_patterns import flipkart_url_patterns
 
