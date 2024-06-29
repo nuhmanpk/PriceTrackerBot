@@ -29,7 +29,7 @@ Price Tracker Bot is a Telegram bot that helps you track the prices of your favo
 git clone https://github.com/nuhmanpk/PriceTrackerBot.git
 ```
 
-2. Create a .env file in the project root (Refer envexample)
+2. Create a .env file in the project root (Refer .envexample file)
 
 ```bash
 cd PriceTrackerBot
