@@ -8,11 +8,12 @@ import os
 import schedule
 import time
 import pytz
+import re
 
 from scraper import scrape
 from scheduler import check_prices
 from helpers import fetch_all_products, add_new_product, fetch_one_product, delete_one
-from regex_patterns import flipkart_url_patterns
+from regex_patterns import flipkart_url_patterns, amazon_url_patterns
 
 load_dotenv()
 
@@ -89,7 +90,9 @@ async def track(_, message):
 @app.on_message(filters.regex("|".join(flipkart_url_patterns)))
 async def track_flipkart_url(_, message):
     try:
-        product_name, price = await scrape(message.text)
+        all_url_patterns = flipkart_url_patterns + amazon_url_patterns
+        platform = "amazon" if any(re.match(pattern, url) for pattern in amazon_url_patterns) else "flipkart"
+        product_name, price = await scrape(url, platform)
         status = await message.reply_text("Adding Your Product... Please Wait!!")
         if product_name and price:
             id = await add_new_product(

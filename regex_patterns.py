@@ -9,3 +9,12 @@ flipkart_url_patterns = [
     r'https?://m\.flipkart\.in/.+',
     # Add more patterns if needed
 ]
+
+amazon_url_patterns = [
+    r'https?://www\.amazon\.com/.+',
+    r'https?://amazon\.com/.+',
+    r'https?://www\.amazon\.in/.+',
+    r'https?://amazon\.in/.+',
+    r'https?://m\.amazon\.com/.+',
+    r'https?://m\.amazon\.in/.+',
+    ]
