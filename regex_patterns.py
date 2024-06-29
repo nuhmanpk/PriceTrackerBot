@@ -18,3 +18,5 @@ amazon_url_patterns = [
     r'https?://m\.amazon\.com/.+',
     r'https?://m\.amazon\.in/.+',
     ]
+
+all_url_patterns = amazon_url_patterns + flipkart_url_patterns
