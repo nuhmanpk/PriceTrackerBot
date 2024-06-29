@@ -90,6 +90,7 @@ async def track(_, message):
 @app.on_message(filters.regex("|".join(all_url_patterns)))
 async def track_flipkart_url(_, message):
     try:
+        url = message.text
         platform = "amazon" if any(re.match(pattern, url) for pattern in amazon_url_patterns) else "flipkart"
         product_name, price = await scrape(url, platform)
         status = await message.reply_text("Adding Your Product... Please Wait!!")
