@@ -2,6 +2,8 @@
 
 Price Tracker Bot is a Telegram bot that helps you track the prices of your favorite products on various online platforms. Whenever there's a change in price, the bot will alert you, ensuring you never miss a deal!
 
+Supports **Flipkart** and **amazon** PriceTracking 
+
 ## Demo
 
 <!-- ![Bot Demo](./demos/priceTrackerbot.gif)
@@ -52,6 +54,9 @@ The fastest way to deploy the application is to click the **Deploy to Koyeb** bu
 
 [![Deploy to Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)](https://app.koyeb.com/deploy?type=git&repository=github.com/nuhmanpk/PriceTrackerBot&branch=main&name=pricetrackerbot)
 
+### Credits
+* Thanks to sannjayy for his Scraper [packages](https://github.com/sannjayy/python_flipkart_scraper)
+
 ## Commands
 * /start : start the bot
 * /help : Get help
@@ -63,3 +68,4 @@ The fastest way to deploy the application is to click the **Deploy to Koyeb** bu
 For any issues or feature requests, please open an [issue](https://github.com/nuhmanpk/PriceTrackerBot/issues).
 
 If you find this repo helpful, don't forget add Your Star.
+
