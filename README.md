@@ -2,7 +2,7 @@
 
 Price Tracker Bot is a Telegram bot that helps you track the prices of your favorite products on various online platforms. Whenever there's a change in price, the bot will alert you, ensuring you never miss a deal!
 
-Supports **Flipkart** and **amazon** PriceTracking 
+⚠️ Supports **Flipkart** and **amazon** PriceTracking 
 
 ## Demo
 
